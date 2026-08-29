@@ -57,6 +57,8 @@ BOARD_KERNEL_CMDLINE :=  \
 
 # Test fresh built kernel
 TARGET_KERNEL_SOURCE := kernel/samsung/m55xq
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_HEADER_ARCH := arm64
 # Triggers custom bash script instead of default Make
 TARGET_KERNEL_MAKE_CMD := bash $(TARGET_KERNEL_SOURCE)/build_m55xq_lineage.sh
 TARGET_KERNEL_CONFIG := vendor_m55_defconfig ## Just a hack for now to let build proceed.
