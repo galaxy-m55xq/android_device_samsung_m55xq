@@ -55,9 +55,32 @@ BOARD_KERNEL_CMDLINE :=  \
 	androidboot.selinux=permissive \
 	loop.max_part=7
 
-# Kernel - prebuilt
-TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
+# Test fresh built kernel
+TARGET_KERNEL_SOURCE := kernel/samsung/m55xq
+# Triggers custom bash script instead of default Make
+TARGET_KERNEL_MAKE_CMD := bash $(TARGET_KERNEL_SOURCE)/build_m55xq_lineage.sh
+TARGET_KERNEL_CONFIG := vendor_m55_defconfig ## Just a hack for now to let build proceed.
+BOARD_KERNEL_IMAGE_NAME := Image
+
+# Module routing and load order
+# 1. Read the prebuilt folders to get just the raw filenames.
+_RECOVERY_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/recovery/*.ko))
+_VENDOR_BOOT_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_boot/*.ko))
+_VENDOR_DLKM_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/*.ko))
+
+# 2. Dynamically wire exact names to your fresh kernel compile output
+BOARD_RECOVERY_KERNEL_MODULES := $(addprefix $(KERNEL_MODULES_OUT)/, $(_RECOVERY_MOD_NAMES))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(addprefix $(KERNEL_MODULES_OUT)/, $(_VENDOR_BOOT_MOD_NAMES))
+BOARD_VENDOR_KERNEL_MODULES := $(addprefix $(KERNEL_MODULES_OUT)/, $(_VENDOR_DLKM_MOD_NAMES))
+
+# 3. Use stock modules.load
+BOARD_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/rootdir/modules/recovery/modules.load))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/rootdir/modules/vendor_boot/modules.load))
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/modules.load))
+
+# Kernel - prebuilt (Nuke prebuilt kernel from BoardConfig for now to test fresh built kernel)
+#TARGET_FORCE_PREBUILT_KERNEL := true
+#TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilts/dtb.img
 BOARD_PREBUILT_RECOVERY_DTB := $(DEVICE_PATH)/prebuilts/recovery_dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
