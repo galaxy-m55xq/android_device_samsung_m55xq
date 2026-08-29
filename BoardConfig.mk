@@ -62,22 +62,6 @@ TARGET_KERNEL_MAKE_CMD := bash $(TARGET_KERNEL_SOURCE)/build_m55xq_lineage.sh
 TARGET_KERNEL_CONFIG := vendor_m55_defconfig ## Just a hack for now to let build proceed.
 BOARD_KERNEL_IMAGE_NAME := Image
 
-# Module routing and load order
-# 1. Read the prebuilt folders to get just the raw filenames.
-_RECOVERY_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/recovery/*.ko))
-_VENDOR_BOOT_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_boot/*.ko))
-_VENDOR_DLKM_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/*.ko))
-
-# 2. Dynamically wire exact names to your fresh kernel compile output
-BOARD_RECOVERY_KERNEL_MODULES := $(addprefix $(_M55_KMOD_OUT)/, $(KERNEL_MODULES_OUT)/, $(_RECOVERY_MOD_NAMES))
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(addprefix $(_M55_KMOD_OUT)/, $(KERNEL_MODULES_OUT)/, $(_VENDOR_BOOT_MOD_NAMES))
-BOARD_VENDOR_KERNEL_MODULES := $(addprefix $(_M55_KMOD_OUT)/, $(KERNEL_MODULES_OUT)/, $(_VENDOR_DLKM_MOD_NAMES))
-
-# 3. Use stock modules.load
-BOARD_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/rootdir/modules/recovery/modules.load.recovery))
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/rootdir/modules/vendor_boot/modules.load))
-BOARD_VENDOR_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/modules.load))
-
 # Kernel - prebuilt (Nuke prebuilt kernel from BoardConfig for now to test fresh built kernel)
 #TARGET_FORCE_PREBUILT_KERNEL := true
 #TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
