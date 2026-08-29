@@ -72,8 +72,8 @@ BOARD_PREBUILT_RECOVERY_DTB := $(DEVICE_PATH)/prebuilts/recovery_dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
 BOARD_PREBUILT_RECOVERY_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/recovery_dtbo.img
 
-# Kernel hack: Tell soong to look at kernel modules by defining the explict output path.
-_M55_KMOD_OUT := out/target/product/m55xq/obj/KERNEL_MODULES
+# Add extra duct-tape (for now)
+BUILD_BROKEN_SRC_DIR_IS_WRITABLE := true
 
 # mkbootimg
 BOARD_MKBOOTIMG_ARGS:= \
