@@ -69,9 +69,9 @@ _VENDOR_BOOT_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/ven
 _VENDOR_DLKM_MOD_NAMES := $(notdir $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/*.ko))
 
 # 2. Dynamically wire exact names to your fresh kernel compile output
-BOARD_RECOVERY_KERNEL_MODULES := $(addprefix $(KERNEL_MODULES_OUT)/, $(_RECOVERY_MOD_NAMES))
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(addprefix $(KERNEL_MODULES_OUT)/, $(_VENDOR_BOOT_MOD_NAMES))
-BOARD_VENDOR_KERNEL_MODULES := $(addprefix $(KERNEL_MODULES_OUT)/, $(_VENDOR_DLKM_MOD_NAMES))
+BOARD_RECOVERY_KERNEL_MODULES := $(addprefix $(_M55_KMOD_OUT)/, $(KERNEL_MODULES_OUT)/, $(_RECOVERY_MOD_NAMES))
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES := $(addprefix $(_M55_KMOD_OUT)/, $(KERNEL_MODULES_OUT)/, $(_VENDOR_BOOT_MOD_NAMES))
+BOARD_VENDOR_KERNEL_MODULES := $(addprefix $(_M55_KMOD_OUT)/, $(KERNEL_MODULES_OUT)/, $(_VENDOR_DLKM_MOD_NAMES))
 
 # 3. Use stock modules.load
 BOARD_RECOVERY_KERNEL_MODULES_LOAD := $(strip $(shell cat $(DEVICE_PATH)/rootdir/modules/recovery/modules.load.recovery))
@@ -85,6 +85,9 @@ TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilts/dtb.img
 BOARD_PREBUILT_RECOVERY_DTB := $(DEVICE_PATH)/prebuilts/recovery_dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
 BOARD_PREBUILT_RECOVERY_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/recovery_dtbo.img
+
+# Kernel hack: Tell soong to look at kernel modules by defining the explict output path.
+_M55_KMOD_OUT := out/target/product/m55xq/obj/KERNEL_MODULES
 
 # mkbootimg
 BOARD_MKBOOTIMG_ARGS:= \
