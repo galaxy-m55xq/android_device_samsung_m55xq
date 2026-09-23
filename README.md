@@ -30,7 +30,7 @@ Repo Sync
 ## Build
 ```
 . build/envsetup.sh
-lunch lineage_m55xq-bp4a-userdebug
+lunch lineage_m55xq-cp1a-userdebug
 mka bacon
 ```
 
