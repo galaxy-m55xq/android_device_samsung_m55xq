@@ -1,7 +1,5 @@
 # Android device tree for samsung SM-M556B (m55xq)
 
-# Android device tree for samsung SM-M556B (m55xq)
-
 ## Make Lineage-24.0 Directory
 ```
 mkdir lineage-24.0; cd lineage-24.0
