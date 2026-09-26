@@ -67,6 +67,12 @@ BOARD_PREBUILT_RECOVERY_DTB := $(DEVICE_PATH)/prebuilts/recovery_dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
 BOARD_PREBUILT_RECOVERY_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/recovery_dtbo.img
 
+# Kernel (References)
+BOARD_KERNEL_IMAGE_NAME := Image
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_SOURCE :=
+TARGET_KERNEL_CONFIG :=
+
 # mkbootimg
 BOARD_MKBOOTIMG_ARGS:= \
 --board=SRPWI19A004 \
