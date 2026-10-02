@@ -1,1 +1,6 @@
+# Device specific file types
 type dqmdbg_file, file_type, data_file_type;
+
+# Samsung sysfs types used by vendor_shsusrd and others
+type sysfs_verinfo, fs_type, sysfs_type;
+type vendor_sysfs_rmnet, fs_type, sysfs_type;

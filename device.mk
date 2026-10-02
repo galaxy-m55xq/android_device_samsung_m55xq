@@ -16,7 +16,6 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/non_ab_device.mk)
 
 # API levels
-PRODUCT_EXTRA_VNDK_VERSIONS := 32
 PRODUCT_SHIPPING_API_LEVEL := 34
 
 PRODUCT_COPY_FILES += \

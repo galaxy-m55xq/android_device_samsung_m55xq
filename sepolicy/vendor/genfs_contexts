@@ -1,0 +1,5 @@
+# genfs contexts for Samsung specific sysfs nodes
+# Adjust paths if needed after collecting more denials
+
+genfscon sysfs /devices/virtual/sec/sec_key/verinfo u:object_r:sysfs_verinfo:s0
+genfscon sysfs /devices/virtual/sec/tsp/verinfo u:object_r:sysfs_verinfo:s0

@@ -11,8 +11,6 @@ AB_OTA_UPDATER := false
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 BUILD_BROKEN_DUP_RULES := true
 
-BOARD_VNDK_VERSION := 32
-
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
@@ -56,7 +54,6 @@ BOARD_KERNEL_CMDLINE :=  \
 	androidboot.memcg=1 \
 	androidboot.usbcontroller=a600000.dwc3 \
 	androidboot.init_fatal_panic=true \
-	androidboot.selinux=permissive \
 	loop.max_part=7
 
 # Kernel - prebuilt
@@ -70,7 +67,6 @@ BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
 BOARD_PREBUILT_RECOVERY_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/recovery_dtbo.img
 
 # Kernel (References)
-BOARD_BOOT_HEADER_VERSION := 4
 BOARD_KERNEL_IMAGE_NAME := Image
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_SOURCE :=
@@ -123,6 +119,10 @@ BOARD_SUPER_PARTITION_SIZE := 13631488000 # TODO: Fix hardcoded value
 BOARD_SUPER_PARTITION_GROUPS := samsung_dynamic_partitions
 BOARD_SAMSUNG_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product odm vendor_dlkm
 BOARD_SAMSUNG_DYNAMIC_PARTITIONS_SIZE := 13627293696 # TODO: Fix hardcoded value
+BOARD_USES_VENDOR_RAMDISK := true
+BOARD_BUILD_VENDOR_RAMDISK_IMAGE := true
+BOARD_VENDOR_RAMDISK_IMAGE := $(PRODUCT_OUT)/vendor_ramdisk.img
+BOARD_VENDOR_BOOT_IMAGE := $(PRODUCT_OUT)/vendor_boot.img
 BOARD_USES_VENDOR_DLKM_PARTITION := true
 BOARD_USES_METADATA_PARTITION := true
 
