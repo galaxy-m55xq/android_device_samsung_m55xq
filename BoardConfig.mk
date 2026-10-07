@@ -61,22 +61,45 @@ BOARD_KERNEL_CMDLINE :=  \
 	androidboot.init_fatal_panic=true \
 	loop.max_part=7
 
-# Kernel - prebuilt
-TARGET_NO_KERNEL_OVERRIDE := true
-TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
-TARGET_RECOVERY_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
+# Kernel (Prebuilt stuffs, dtb and dtbo)
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilts/dtb.img
 BOARD_PREBUILT_RECOVERY_DTB := $(DEVICE_PATH)/prebuilts/recovery_dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
 BOARD_PREBUILT_RECOVERY_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/recovery_dtbo.img
 
-# Kernel (References)
+# Kernel (From source)
 BOARD_BOOT_HEADER_VERSION := 4
 BOARD_KERNEL_IMAGE_NAME := Image
 TARGET_KERNEL_ARCH := arm64
-TARGET_KERNEL_SOURCE :=
-TARGET_KERNEL_CONFIG :=
+TARGET_KERNEL_SOURCE := kernel/samsung/m55xq
+TARGET_KERNEL_CONFIG := \
+    gki_defconfig \
+    x55_defconfig \
+    x55_GKI.config \
+    x55_sec_defconfig \
+    x55_sec_eng_defconfig \
+    x55_tuivm_debug.config
+
+# Kernel modules (from source)
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/samsung/sm7450-modules
+TARGET_KERNEL_EXT_MODULES := \
+    qcom/opensource/mmrm-driver \
+    qcom/opensource/audio-kernel \
+    qcom/opensource/datarmnet/core \
+    qcom/opensource/datarmnet-ext/shs \
+    qcom/opensource/datarmnet-ext/sch \
+    qcom/opensource/datarmnet-ext/perf \
+    qcom/opensource/datarmnet-ext/perf_tether \
+    qcom/opensource/datarmnet-ext/offload \
+    qcom/opensource/datarmnet-ext/aps \
+    qcom/opensource/datarmnet-ext/wlan \
+    qcom/opensource/wlan/qcacld-3.0/.qca6750 \
+    qcom/opensource/camera-kernel \
+    qcom/opensource/display-drivers/msm \
+    qcom/opensource/video-driver \
+    qcom/opensource/eva-kernel \
+    qcom/opensource/cvp-kernel \
+    qcom/opensource/dataipa/drivers/platform/msm
 
 # mkbootimg
 BOARD_MKBOOTIMG_ARGS:= \
