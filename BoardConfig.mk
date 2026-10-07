@@ -101,6 +101,11 @@ TARGET_KERNEL_EXT_MODULES := \
     qcom/opensource/cvp-kernel \
     qcom/opensource/dataipa/drivers/platform/msm
 
+# Define modules and load lists for vendor_boot, recovery and vendor_dlkm
+vendor_boot_stage := $(strip $(shell cat $(TARGET_KERNEL_SOURCE)/modules.list.x55.vendor_boot))
+recovery_stage := $(strip $(shell cat $(TARGET_KERNEL_SOURCE)/modules.list.x55.recovery))
+vendor_dlkm_stage := $(strip $(shell cat $TARGET_KERNEL_SOURCE/modules.list.x55.vendor_dlkm))
+
 # mkbootimg
 BOARD_MKBOOTIMG_ARGS:= \
 --board=SRPWI19A004 \
@@ -211,6 +216,8 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD += $(recovery_stage)
+
 # Security patch level
 BOOT_SECURITY_PATCH := 2026-01-01
 VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
@@ -243,10 +250,10 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_samsung_sm7450
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)/releasetools
 
-# Modules
-BOARD_RECOVERY_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/recovery/*.ko)
-BOARD_VENDOR_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/*.ko)
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_boot/*.ko)
+# Modules (Comment these out if wiring up kernel modules (for now))
+# BOARD_RECOVERY_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/recovery/*.ko)
+# BOARD_VENDOR_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/*.ko)
+# BOARD_VENDOR_RAMDISK_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_boot/*.ko)
 
 # Maintainer
 PRODUCT_MAINTAINER := SavedByLight, subhu2008, console-ramoops
