@@ -235,6 +235,13 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.btconfigstore@1.0.vendor \
     vendor.qti.hardware.btconfigstore@2.0.vendor 
 
+# Other
+PRODUCT_PACKAGES += \
+    android.hardware.power-service \
+    android.hardware.thermal@2.0-service.qti \
+    android.hardware.lights-service.qti \
+    android.hardware.vibrator-service.qti
+
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
