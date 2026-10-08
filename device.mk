@@ -251,7 +251,15 @@ PRODUCT_SOONG_NAMESPACES += \
     hardware/google/pixel \
     hardware/lineage/interfaces/power-libperfmgr \
     hardware/qcom-caf/common/libqti-perfd-client \
-    hardware/samsung
+    hardware/samsung \
+    vendor/qcom/opensource/agm \
+    vendor/qcom/opensource/pal \
+    vendor/qcom/opensource/audio-hal \
+    vendor/qcom/opensource/power \
+    vendor/qcom/opensource/thermal-hal \
+    vendor/qcom/opensource/vibrator \
+    vendor/qcom/opensource/lights \
+    vendor/qcom/opensource/interfaces
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/samsung/m55xq/m55xq-vendor.mk)
