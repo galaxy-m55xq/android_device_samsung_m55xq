@@ -232,7 +232,14 @@ PRODUCT_PACKAGES += \
     libbluetooth_audio_session \
     vendor.qti.hardware.bluetooth_audio@2.1.vendor \
     vendor.qti.hardware.btconfigstore@1.0.vendor \
-    vendor.qti.hardware.btconfigstore@2.0.vendor 
+    vendor.qti.hardware.btconfigstore@2.0.vendor
+
+# Other
+PRODUCT_PACKAGES += \
+    android.hardware.power-service \
+    android.hardware.thermal@2.0-service.qti \
+    android.hardware.lights-service.qti \
+    android.hardware.vibrator-service.qti
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
@@ -244,13 +251,22 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/fstab.qcom:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.qcom
     
 # Namespaces
+# Namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     hardware/google/interfaces \
     hardware/google/pixel \
     hardware/lineage/interfaces/power-libperfmgr \
     hardware/qcom-caf/common/libqti-perfd-client \
-    hardware/samsung
+    hardware/samsung \
+    vendor/qcom/opensource/agm \
+    vendor/qcom/opensource/pal \
+    vendor/qcom/opensource/audio-hal \
+    vendor/qcom/opensource/power \
+    vendor/qcom/opensource/thermal-hal \
+    vendor/qcom/opensource/vibrator \
+    vendor/qcom/opensource/lights \
+    vendor/qcom/opensource/interfaces
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/samsung/m55xq/m55xq-vendor.mk)
