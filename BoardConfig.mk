@@ -35,6 +35,9 @@ QCOM_BOARD_PLATFORMS := $(TARGET_SOC)
 TARGET_BOARD_PLATFORM_GPU := Adreno-644
 TARGET_NO_BOOTLOADER := true
 
+# VNDK
+BOARD_VNDK_VERSION := 32
+
 # QCOM
 BOARD_USES_QCOM_HARDWARE := true
 
@@ -54,40 +57,90 @@ BOARD_KERNEL_CMDLINE :=  \
 	androidboot.memcg=1 \
 	androidboot.usbcontroller=a600000.dwc3 \
 	androidboot.init_fatal_panic=true \
-	androidboot.selinux=permissive \
 	loop.max_part=7
 
-# Kernel - prebuilt
-TARGET_NO_KERNEL_OVERRIDE := true
-TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
-TARGET_RECOVERY_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
-TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilts/dtb.img
-BOARD_PREBUILT_RECOVERY_DTB := $(DEVICE_PATH)/prebuilts/recovery_dtb.img
-BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
-BOARD_PREBUILT_RECOVERY_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/recovery_dtbo.img
+# Kernel (From source)
+BOARD_KERNEL_PAGESIZE := 4096
+BOARD_BOOT_HEADER_VERSION := 4
+BOARD_KERNEL_IMAGE_NAME := Image
+TARGET_KERNEL_ARCH := arm64
+TARGET_KERNEL_SOURCE := kernel/samsung/m55xq
+
+TARGET_KERNEL_ADDITIONAL_FLAGS := \
+       CROSS_COMPILE=aarch64-linux-gnu- \
+       CLANG_TRIPLE=aarch64-linux-gnu-
+
+TARGET_KERNEL_CLANG_COMPILE := true
+TARGET_KERNEL_CLANG_VERSION := r416183b
+TARGET_KERNEL_CONFIG := \
+    gki_defconfig \
+    vendor/x55_defconfig \
+    vendor/x55_GKI.config \
+    vendor/x55_sec_defconfig \
+    vendor/x55_sec_eng_defconfig \
+    vendor/x55_tuivm_debug.config \
+    vendor/x55_consolidate.config \
+    vendor/x55_build_dt.config \
+    vendor/x55_core_modules.config
+
+# Kernel modules (from source)
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/samsung/sm7450-modules
+TARGET_KERNEL_EXT_MODULES := \
+    qcom/opensource/mmrm-driver \
+    qcom/opensource/audio-kernel \
+    qcom/opensource/datarmnet/core \
+    qcom/opensource/datarmnet-ext/shs \
+    qcom/opensource/datarmnet-ext/sch \
+    qcom/opensource/datarmnet-ext/perf \
+    qcom/opensource/datarmnet-ext/perf_tether \
+    qcom/opensource/datarmnet-ext/offload \
+    qcom/opensource/datarmnet-ext/aps \
+    qcom/opensource/datarmnet-ext/wlan \
+    qcom/opensource/wlan/qcacld-3.0/.qca6750 \
+    qcom/opensource/camera-kernel \
+    qcom/opensource/display-drivers/msm \
+    qcom/opensource/video-driver \
+    qcom/opensource/eva-kernel \
+    qcom/opensource/cvp-kernel \
+    qcom/opensource/dataipa/drivers/platform/msm
+
+# DTB and DTBO
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_KERNEL_SEPARATED_DTBO := true
+
+# Define modules and load lists for vendor_boot, recovery and vendor_dlkm
+vendor_boot_stage := $(TARGET_KERNEL_SOURCE)/modules.list.x55.vendor_boot
+recovery_stage := $(TARGET_KERNEL_SOURCE)/modules.list.x55.recovery
+vendor_dlkm_stage := $(TARGET_KERNEL_SOURCE)/modules.list.x55.vendor_dlkm
+
+# Wire up vendor_dlkm modules.load
+BOARD_VENDOR_KERNEL_MODULES_LOAD := $(notdir $(shell cat $(vendor_dlkm_stage)))
+
+# Wire up vendor_boot
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES_LOAD := $(notdir $(shell cat $(vendor_boot_stage)))
+
+# Wire up recovery
+BOARD_RECOVERY_KERNEL_MODULES_LOAD := $(notdir $(shell cat $(recovery_stage)))
 
 # mkbootimg
 BOARD_MKBOOTIMG_ARGS:= \
 --board=SRPWI19A004 \
---pagesize=4096 \
+--pagesize=$(BOARD_KERNEL_PAGESIZE) \
 --base=0x00000000 \
 --kernel_offset=0x00008000 \
 --dtb_offset=0x01f00000 \
---header_version=4 \
---dtb=$(TARGET_PREBUILT_DTB)
+--header_version=4
 
 # mkbootimg recovery
 BOARD_RECOVERY_MKBOOTIMG_ARGS := \
 --board=SRPWI19A003 \
---pagesize=4096 \
+--pagesize=$(BOARD_KERNEL_PAGESIZE) \
 --base=0x00000000 \
 --dtb_offset=0x01f00000 \
 --kernel_offset=0x00008000 \
 --ramdisk_offset=0x02000000 \
 --tags_offset=0x01e00000 \
---header_version=2 \
---dtb=$(BOARD_PREBUILT_RECOVERY_DTB)
+--header_version=2
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
@@ -114,10 +167,6 @@ BOARD_SUPER_PARTITION_SIZE := 13631488000 # TODO: Fix hardcoded value
 BOARD_SUPER_PARTITION_GROUPS := samsung_dynamic_partitions
 BOARD_SAMSUNG_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext vendor product odm vendor_dlkm
 BOARD_SAMSUNG_DYNAMIC_PARTITIONS_SIZE := 13627293696 # TODO: Fix hardcoded value
-BOARD_USES_VENDOR_RAMDISK := true
-BOARD_BUILD_VENDOR_RAMDISK_IMAGE := true
-BOARD_VENDOR_RAMDISK_IMAGE := $(PRODUCT_OUT)/vendor_ramdisk.img
-BOARD_VENDOR_BOOT_IMAGE := $(PRODUCT_OUT)/vendor_boot.img
 BOARD_USES_VENDOR_DLKM_PARTITION := true
 BOARD_USES_METADATA_PARTITION := true
 
@@ -181,6 +230,8 @@ TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
+BOARD_VENDOR_RAMDISK_RECOVERY_KERNEL_MODULES_LOAD += $(recovery_stage)
+
 # Security patch level
 BOOT_SECURITY_PATCH := 2026-01-01
 VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
@@ -213,10 +264,10 @@ DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE += \
 TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_samsung_sm7450
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)/releasetools
 
-# Modules
-BOARD_RECOVERY_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/recovery/*.ko)
-BOARD_VENDOR_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/*.ko)
-BOARD_VENDOR_RAMDISK_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_boot/*.ko)
+# Modules (Comment these out if wiring up kernel modules (for now))
+# BOARD_RECOVERY_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/recovery/*.ko)
+# BOARD_VENDOR_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_dlkm/*.ko)
+# BOARD_VENDOR_RAMDISK_KERNEL_MODULES += $(wildcard $(DEVICE_PATH)/rootdir/modules/vendor_boot/*.ko)
 
 # Maintainer
 PRODUCT_MAINTAINER := SavedByLight, subhu2008, console-ramoops
