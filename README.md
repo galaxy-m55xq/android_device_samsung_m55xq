@@ -12,8 +12,7 @@ repo init -u https://github.com/LineageOS/android.git -b lineage-24.0 --git-lfs
 ```
 mkdir -p .repo/local_manifests
 
-cat > .repo/local_manifests/roomservice.xml
-<< 'EOF'
+cat > .repo/local_manifests/roomservice.xml << 'EOF'
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
 <!-- Device + Vendor -->
