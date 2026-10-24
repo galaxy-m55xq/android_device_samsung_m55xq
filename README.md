@@ -24,7 +24,7 @@ EOF
 ```
 ## Repo Sync
 ```
-repo Sync
+repo sync
 ```
 ## Build
 ```
