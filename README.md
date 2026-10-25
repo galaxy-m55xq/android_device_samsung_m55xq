@@ -19,6 +19,14 @@ cat > .repo/local_manifests/roomservice.xml << 'EOF'
 <project name="galaxy-m55xq/android_device_samsung_m55xq" path="device/samsung/m55xq" remote="github" revision="lineage-24.0-kernel-wire-up" />
 <project name="galaxy-m55xq/android_vendor_samsung_m55xq" path="vendor/samsung/m55xq" remote="github" revision="M556BXXS5DZF2" />
 <project name="LineageOS/android_hardware_samsung" path="hardware/samsung" remote="github" revision="lineage-24.0" />
+<project name="galaxy-m55xq/android_packages_apps_Etar"
+path="packages/apps/Etar"
+remote="github"
+revision="lineage-24.0" />
+<project name="galaxy-m55xq/android_packages_apps_Canvas"
+path="packages/apps/Canvas"
+remote="github"
+revision="lineage-24.0" />
 </manifest>
 EOF
 ```
