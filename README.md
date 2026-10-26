@@ -6,7 +6,7 @@ mkdir lineage-24.0; cd lineage-24.0
 ```
 ## Init lineage-24.0
 ```
-repo init -u https://github.com/LineageOS/android.git -b lineage-24.0 --git-lfs
+repo init -u https://github.com/galaxy-m55xq/android.git -b lineage-24.0 --git-lfs
 ```
 ## Manifest: Latest (lineage-24.0)
 ```
