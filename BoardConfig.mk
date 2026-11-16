@@ -71,17 +71,9 @@ TARGET_KERNEL_ADDITIONAL_FLAGS := \
        CLANG_TRIPLE=aarch64-linux-gnu-
 
 TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_KERNEL_CLANG_VERSION := r416183b
 TARGET_KERNEL_CONFIG := \
     gki_defconfig \
-    vendor/x55_defconfig \
-    vendor/x55_GKI.config \
-    vendor/x55_sec_defconfig \
-    vendor/x55_sec_eng_defconfig \
-    vendor/x55_tuivm_debug.config \
-    vendor/x55_consolidate.config \
-    vendor/x55_build_dt.config \
-    vendor/x55_core_modules.config
+    vendor/x55_GKI.config
 
 # Kernel modules (from source)
 TARGET_KERNEL_EXT_MODULE_ROOT := kernel/samsung/sm7450-modules
